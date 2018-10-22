@@ -72,7 +72,7 @@ suite("Unit Tests", () => {
 		});
 	});
 
-	/*suite("Function convertController.getReturnUnit(initUnit)", () => {
+	suite("Function convertController.getReturnUnit(initUnit)", () => {
 		test("For Each Valid Unit Inputs", done => {
 			let input = ["gal", "l", "mi", "km", "lbs", "kg"];
 			let expect = ["l", "gal", "km", "mi", "kg", "lbs"];
@@ -85,12 +85,16 @@ suite("Unit Tests", () => {
 
 	suite("Function convertHandler.spellOutUnit(unit)", () => {
 		test("For Each Valid Unit Inputs", done => {
-			//see above example for hint
+			let input = ["gal", "l", "mi", "km", "lbs", "kg"];
+			let expect = ["gallons", "litres", "miles", "kilometers", "pounds", "kilograms"];
+			input.forEach((item, index)=> {
+				assert.equal(convertController.spellOutUnit(item), expect[index]);
+			});
 			done();
 		});
 	});
 
-	suite("Function convertHandler.convert(num, unit)", () => {
+	/*suite("Function convertHandler.convert(num, unit)", () => {
 		test("Gal to L", done => {
 			let input = [5, "gal"];
 			let expected = 18.9271;

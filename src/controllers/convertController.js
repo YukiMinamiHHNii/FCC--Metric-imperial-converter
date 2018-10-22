@@ -1,5 +1,14 @@
 const expr = require("expr-eval").Parser;
 
+const units = {
+	gal: { returnUnit: "l", spelling: "gallons" },
+	l: { returnUnit: "gal", spelling: "litres" },
+	mi: { returnUnit: "km", spelling: "miles" },
+	km: { returnUnit: "mi", spelling: "kilometers" },
+	lbs: { returnUnit: "kg", spelling: "pounds" },
+	kg: { returnUnit: "lbs", spelling: "kilograms" }
+};
+
 exports.getNum = input => {
 	let result = false;
 
@@ -16,10 +25,15 @@ exports.getNum = input => {
 };
 
 exports.getUnit = input => {
-	let units = ["gal", "l", "mi", "km", "lbs", "kg"],
-		data = input.match(/[a-zA-Z]*/);
+	let data = input.match(/[a-zA-Z]*/);
 
-	return data != null && units.includes(data[0].toLowerCase()) ? data : false;
+	return data != null && units[data[0].toLowerCase()] != null ? data : false;
 };
 
-exports.getReturnUnit = input => {};
+exports.getReturnUnit = input => {
+	return units[input].returnUnit;
+};
+
+exports.spellOutUnit = input => {
+	return units[input].spelling;
+};
