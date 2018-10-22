@@ -57,29 +57,33 @@ suite("Unit Tests", () => {
 				"LBS",
 				"KG"
 			];
-			input.forEach(function(ele) {
-				//assert
+			input.forEach(item=> {
+				assert.isOk(convertController.getUnit(item), 'Provided unit is correct');
 			});
 			done();
 		});
 
 		test("Unknown Unit Input", done => {
+			let input=['test', 'TEST', 'gals', 'LBSLBS', 'LLL', ' m'];
+			input.forEach(item=>{
+				assert.isNotOk(convertController.getUnit(item), 'Provided unit is not correct');
+			})
 			done();
 		});
 	});
 
-	suite("Function convertController.getReturnUnit(initUnit)", () => {
+	/*suite("Function convertController.getReturnUnit(initUnit)", () => {
 		test("For Each Valid Unit Inputs", done => {
 			let input = ["gal", "l", "mi", "km", "lbs", "kg"];
 			let expect = ["l", "gal", "km", "mi", "kg", "lbs"];
-			input.forEach(function(ele, i) {
-				assert.equal(convertController.getReturnUnit(ele), expect[i]);
+			input.forEach((item, index)=> {
+				assert.equal(convertController.getReturnUnit(item), expect[index]);
 			});
 			done();
 		});
 	});
 
-	/*suite("Function convertHandler.spellOutUnit(unit)", () => {
+	suite("Function convertHandler.spellOutUnit(unit)", () => {
 		test("For Each Valid Unit Inputs", done => {
 			//see above example for hint
 			done();

@@ -15,6 +15,11 @@ exports.getNum = input => {
 	return result;
 };
 
-exports.getUnit = input => {};
+exports.getUnit = input => {
+	let units = ["gal", "l", "mi", "km", "lbs", "kg"],
+		data = input.match(/[a-zA-Z]*/);
+
+	return data != null && units.includes(data[0].toLowerCase()) ? data : false;
+};
 
 exports.getReturnUnit = input => {};
