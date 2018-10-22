@@ -4,7 +4,7 @@
   "description": "Metric to imperial converter for FCC QA and InfoSec certification",
   "main": "app.js",
   "scripts": {
-    "test": "mocha --ui tdd tests",
+    "test": "mocha --ui tdd src/tests",
     "start": "nodemon app.js"
   },
   "repository": {
@@ -26,6 +26,7 @@
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "dotenv": "^6.1.0",
+    "expr-eval": "^1.2.2",
     "express": "^4.16.4",
     "helmet": "^3.14.0",
     "mocha": "^5.2.0",
