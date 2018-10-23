@@ -37,3 +37,36 @@ exports.getReturnUnit = input => {
 exports.spellOutUnit = input => {
 	return units[input].spelling;
 };
+
+exports.convert = (value, unit, result) => {
+	let data;
+
+	if (!value) {
+		data="Invalid number";
+	} else {
+		switch (unit) {
+			case "gal":
+				data= expr.evaluate(`${value}/0.26417`).toFixed(5);
+				break;
+			case "l":
+			data= expr.evaluate(`${value}*.26417`).toFixed(5);
+				break;
+			case "mi":
+			data= expr.evaluate(`${value}/.62137`).toFixed(5);
+				break;
+			case "km":
+			data= expr.evaluate(`${value}*.62137`).toFixed(5);
+				break;
+			case "lbs":
+			data= expr.evaluate(`${value}/2.2046`).toFixed(5);
+				break;
+			case "kg":
+			data= expr.evaluate(`${value}*2.2046`).toFixed(5);
+				break;
+			default:
+			data= 'Invalid unit';
+				break;
+		}
+	}
+	return result(data);
+};

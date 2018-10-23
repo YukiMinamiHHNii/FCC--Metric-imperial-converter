@@ -57,17 +57,23 @@ suite("Unit Tests", () => {
 				"LBS",
 				"KG"
 			];
-			input.forEach(item=> {
-				assert.isOk(convertController.getUnit(item), 'Provided unit is correct');
+			input.forEach(item => {
+				assert.isOk(
+					convertController.getUnit(item),
+					"Provided unit is correct"
+				);
 			});
 			done();
 		});
 
 		test("Unknown Unit Input", done => {
-			let input=['test', 'TEST', 'gals', 'LBSLBS', 'LLL', ' m'];
-			input.forEach(item=>{
-				assert.isNotOk(convertController.getUnit(item), 'Provided unit is not correct');
-			})
+			let input = ["test", "TEST", "gals", "LBSLBS", "LLL", " m"];
+			input.forEach(item => {
+				assert.isNotOk(
+					convertController.getUnit(item),
+					"Provided unit is not correct"
+				);
+			});
 			done();
 		});
 	});
@@ -76,7 +82,7 @@ suite("Unit Tests", () => {
 		test("For Each Valid Unit Inputs", done => {
 			let input = ["gal", "l", "mi", "km", "lbs", "kg"];
 			let expect = ["l", "gal", "km", "mi", "kg", "lbs"];
-			input.forEach((item, index)=> {
+			input.forEach((item, index) => {
 				assert.equal(convertController.getReturnUnit(item), expect[index]);
 			});
 			done();
@@ -86,44 +92,80 @@ suite("Unit Tests", () => {
 	suite("Function convertHandler.spellOutUnit(unit)", () => {
 		test("For Each Valid Unit Inputs", done => {
 			let input = ["gal", "l", "mi", "km", "lbs", "kg"];
-			let expect = ["gallons", "litres", "miles", "kilometers", "pounds", "kilograms"];
-			input.forEach((item, index)=> {
+			let expect = [
+				"gallons",
+				"litres",
+				"miles",
+				"kilometers",
+				"pounds",
+				"kilograms"
+			];
+			input.forEach((item, index) => {
 				assert.equal(convertController.spellOutUnit(item), expect[index]);
 			});
 			done();
 		});
 	});
 
-	/*suite("Function convertHandler.convert(num, unit)", () => {
+	suite("Function convertHandler.convert(num, unit, result)", () => {
 		test("Gal to L", done => {
 			let input = [5, "gal"];
 			let expected = 18.9271;
-			assert.approximately(
-				convertHandler.convert(input[0], input[1]),
-				expected,
-				0.1
-			); //0.1 tolerance
+
+			convertController.convert(input[0], input[1], result => {
+				assert.approximately(
+					parseFloat(result),
+					expected,
+					0.1 //tolerance
+				);
+			});
+
 			done();
 		});
 
 		test("L to Gal", done => {
-			//done();
+			let input = [5, "l"];
+			let expected = 1.32085;
+			convertController.convert(input[0], input[1], result => {
+				assert.approximately(parseFloat(result), expected, 0.1);
+			});
+			done();
 		});
 
 		test("Mi to Km", done => {
-			//done();
+			let input = [5, "mi"];
+			let expected = 8.04673;
+			convertController.convert(input[0], input[1], result => {
+				assert.approximately(parseFloat(result), expected, 0.1);
+			});
+			done();
 		});
 
 		test("Km to Mi", done => {
-			//done();
+			let input = [5, "km"];
+			let expected = 3.10685;
+			convertController.convert(input[0], input[1], result => {
+				assert.approximately(parseFloat(result), expected, 0.1);
+			});
+			done();
 		});
 
 		test("Lbs to Kg", done => {
-			//done();
+			let input = [5, "lbs"];
+			let expected = 2.26798;
+			convertController.convert(input[0], input[1], result => {
+				assert.approximately(parseFloat(result), expected, 0.1);
+			});
+			done();
 		});
 
 		test("Kg to Lbs", done => {
-			//done();
+			let input = [5, "kg"];
+			let expected = 11.023;
+			convertController.convert(input[0], input[1], result => {
+				assert.approximately(parseFloat(result), expected, 0.1);
+			});
+			done();
 		});
-	});*/
+	});
 });
