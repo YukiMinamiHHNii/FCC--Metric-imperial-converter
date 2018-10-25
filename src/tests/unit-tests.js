@@ -80,8 +80,8 @@ suite("Unit Tests", () => {
 
 	suite("Function convertController.getReturnUnit(initUnit)", () => {
 		test("For Each Valid Unit Inputs", done => {
-			let input = ["gal", "l", "mi", "km", "lbs", "kg"];
-			let expect = ["l", "gal", "km", "mi", "kg", "lbs"];
+			let input = ["gal", "L", "mi", "km", "lbs", "kg"];
+			let expect = ["L", "gal", "km", "mi", "kg", "lbs"];
 			input.forEach((item, index) => {
 				assert.equal(convertController.getReturnUnit(item), expect[index]);
 			});
@@ -91,7 +91,7 @@ suite("Unit Tests", () => {
 
 	suite("Function convertHandler.spellOutUnit(unit)", () => {
 		test("For Each Valid Unit Inputs", done => {
-			let input = ["gal", "l", "mi", "km", "lbs", "kg"];
+			let input = ["gal", "L", "mi", "km", "lbs", "kg"];
 			let expect = [
 				"gallons",
 				"litres",
@@ -107,14 +107,14 @@ suite("Unit Tests", () => {
 		});
 	});
 
-	suite("Function convertHandler.convert(num, unit, result)", () => {
+	suite("Function convertHandler.convert(num, unit, (err, res))", () => {
 		test("Gal to L", done => {
 			let input = [5, "gal"];
 			let expected = 18.9271;
 
-			convertController.convert(input[0], input[1], result => {
+			convertController.convert(input[0], input[1], (err, res) => {
 				assert.approximately(
-					parseFloat(result),
+					parseFloat(res),
 					expected,
 					0.1 //tolerance
 				);
@@ -124,10 +124,10 @@ suite("Unit Tests", () => {
 		});
 
 		test("L to Gal", done => {
-			let input = [5, "l"];
+			let input = [5, "L"];
 			let expected = 1.32085;
-			convertController.convert(input[0], input[1], result => {
-				assert.approximately(parseFloat(result), expected, 0.1);
+			convertController.convert(input[0], input[1], (err, res) => {
+				assert.approximately(parseFloat(res), expected, 0.1);
 			});
 			done();
 		});
@@ -135,8 +135,8 @@ suite("Unit Tests", () => {
 		test("Mi to Km", done => {
 			let input = [5, "mi"];
 			let expected = 8.04673;
-			convertController.convert(input[0], input[1], result => {
-				assert.approximately(parseFloat(result), expected, 0.1);
+			convertController.convert(input[0], input[1], (err, res) => {
+				assert.approximately(parseFloat(res), expected, 0.1);
 			});
 			done();
 		});
@@ -144,8 +144,8 @@ suite("Unit Tests", () => {
 		test("Km to Mi", done => {
 			let input = [5, "km"];
 			let expected = 3.10685;
-			convertController.convert(input[0], input[1], result => {
-				assert.approximately(parseFloat(result), expected, 0.1);
+			convertController.convert(input[0], input[1], (err, res) => {
+				assert.approximately(parseFloat(res), expected, 0.1);
 			});
 			done();
 		});
@@ -153,8 +153,8 @@ suite("Unit Tests", () => {
 		test("Lbs to Kg", done => {
 			let input = [5, "lbs"];
 			let expected = 2.26798;
-			convertController.convert(input[0], input[1], result => {
-				assert.approximately(parseFloat(result), expected, 0.1);
+			convertController.convert(input[0], input[1], (err, res) => {
+				assert.approximately(parseFloat(res), expected, 0.1);
 			});
 			done();
 		});
@@ -162,8 +162,8 @@ suite("Unit Tests", () => {
 		test("Kg to Lbs", done => {
 			let input = [5, "kg"];
 			let expected = 11.023;
-			convertController.convert(input[0], input[1], result => {
-				assert.approximately(parseFloat(result), expected, 0.1);
+			convertController.convert(input[0], input[1], (err, res) => {
+				assert.approximately(parseFloat(res), expected, 0.1);
 			});
 			done();
 		});

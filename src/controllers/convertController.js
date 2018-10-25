@@ -1,15 +1,15 @@
 const expr = require("expr-eval").Parser;
 
 const units = {
-	gal: { returnUnit: "l", spelling: "gallons" },
-	l: { returnUnit: "gal", spelling: "litres" },
+	gal: { returnUnit: "L", spelling: "gallons" },
+	L: { returnUnit: "gal", spelling: "litres" },
 	mi: { returnUnit: "km", spelling: "miles" },
 	km: { returnUnit: "mi", spelling: "kilometers" },
 	lbs: { returnUnit: "kg", spelling: "pounds" },
 	kg: { returnUnit: "lbs", spelling: "kilograms" }
 };
 
-exports.getNum = input => {
+function getNum(input) {
 	let result = false;
 
 	if (input.match(/\//g) == null || input.match(/\//g).length == 1) {
@@ -22,51 +22,80 @@ exports.getNum = input => {
 	}
 
 	return result;
-};
+}
 
-exports.getUnit = input => {
-	let data = input.match(/[a-zA-Z]*/);
+function getUnit(input) {
+	let data = input.match(/[a-zA-Z]+/);
 
-	return data != null && units[data[0].toLowerCase()] != null ? data : false;
-};
+	return data != null && units[data[0]] != null
+		? data[0]
+		: false;
+}
 
-exports.getReturnUnit = input => {
+function getReturnUnit(input) {
 	return units[input].returnUnit;
-};
+}
 
-exports.spellOutUnit = input => {
+function spellOutUnit(input) {
 	return units[input].spelling;
-};
+}
 
-exports.convert = (value, unit, result) => {
+function convert(num, unit, result) {
 	let data;
 
-	if (!value) {
-		data="Invalid number";
+	if (!num) {
+		return result(true, "Invalid number");
 	} else {
 		switch (unit) {
 			case "gal":
-				data= expr.evaluate(`${value}/0.26417`).toFixed(5);
+				data = expr.evaluate(`${num}/0.26417`).toFixed(5);
 				break;
-			case "l":
-			data= expr.evaluate(`${value}*.26417`).toFixed(5);
+			case "L":
+				data = expr.evaluate(`${num}*.26417`).toFixed(5);
 				break;
 			case "mi":
-			data= expr.evaluate(`${value}/.62137`).toFixed(5);
+				data = expr.evaluate(`${num}/.62137`).toFixed(5);
 				break;
 			case "km":
-			data= expr.evaluate(`${value}*.62137`).toFixed(5);
+				data = expr.evaluate(`${num}*.62137`).toFixed(5);
 				break;
 			case "lbs":
-			data= expr.evaluate(`${value}/2.2046`).toFixed(5);
+				data = expr.evaluate(`${num}/2.2046`).toFixed(5);
 				break;
 			case "kg":
-			data= expr.evaluate(`${value}*2.2046`).toFixed(5);
+				data = expr.evaluate(`${num}*2.2046`).toFixed(5);
 				break;
 			default:
-			data= 'Invalid unit';
+				return result(true, "Invalid unit");
 				break;
 		}
 	}
-	return result(data);
+
+	return result(null, data);
+}
+
+exports.doConvert = (req, res) => {
+	let num = getNum(req.query.input),
+		unit = getUnit(req.query.input);
+
+	convert(num, unit, (err, data) => {
+		if (err) {
+			res.json({ error: data });
+		} else {
+			let returnUnit = getReturnUnit(unit);
+			res.json({
+				initNum: parseFloat(num),
+				initUnit: unit,
+				returnNum: parseFloat(data),
+				returnUnit: returnUnit,
+				string: `${num} ${unit} converts to ${data} ${returnUnit}`
+			});
+		}
+	});
 };
+
+exports.getNum = getNum;
+exports.getUnit = getUnit;
+exports.getReturnUnit = getReturnUnit;
+exports.spellOutUnit = spellOutUnit;
+exports.convert = convert;
