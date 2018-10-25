@@ -27,9 +27,7 @@ function getNum(input) {
 function getUnit(input) {
 	let data = input.match(/[a-zA-Z]+/);
 
-	return data != null && units[data[0]] != null
-		? data[0]
-		: false;
+	return data != null && units[data[0]] != null ? data[0] : false;
 }
 
 function getReturnUnit(input) {
@@ -41,34 +39,44 @@ function spellOutUnit(input) {
 }
 
 function convert(num, unit, result) {
-	let data;
+	let data,
+		invalidNum = false,
+		invalidUnit = false;
 
 	if (!num) {
+		invalidNum = true;
+	}
+
+	switch (unit) {
+		case "gal":
+			data = expr.evaluate(`${num}/0.26417`).toFixed(5);
+			break;
+		case "L":
+			data = expr.evaluate(`${num}*.26417`).toFixed(5);
+			break;
+		case "mi":
+			data = expr.evaluate(`${num}/.62137`).toFixed(5);
+			break;
+		case "km":
+			data = expr.evaluate(`${num}*.62137`).toFixed(5);
+			break;
+		case "lbs":
+			data = expr.evaluate(`${num}/2.2046`).toFixed(5);
+			break;
+		case "kg":
+			data = expr.evaluate(`${num}*2.2046`).toFixed(5);
+			break;
+		default:
+			invalidUnit = true;
+			break;
+	}
+
+	if (invalidNum && invalidUnit) {
+		return result(true, "Invalid number and unit");
+	} else if (invalidNum && !invalidUnit) {
 		return result(true, "Invalid number");
-	} else {
-		switch (unit) {
-			case "gal":
-				data = expr.evaluate(`${num}/0.26417`).toFixed(5);
-				break;
-			case "L":
-				data = expr.evaluate(`${num}*.26417`).toFixed(5);
-				break;
-			case "mi":
-				data = expr.evaluate(`${num}/.62137`).toFixed(5);
-				break;
-			case "km":
-				data = expr.evaluate(`${num}*.62137`).toFixed(5);
-				break;
-			case "lbs":
-				data = expr.evaluate(`${num}/2.2046`).toFixed(5);
-				break;
-			case "kg":
-				data = expr.evaluate(`${num}*2.2046`).toFixed(5);
-				break;
-			default:
-				return result(true, "Invalid unit");
-				break;
-		}
+	} else if (!invalidNum && invalidUnit) {
+		return result(true, "Invalid unit");
 	}
 
 	return result(null, data);

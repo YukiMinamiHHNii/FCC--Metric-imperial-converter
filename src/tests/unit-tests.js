@@ -43,20 +43,7 @@ suite("Unit Tests", () => {
 
 	suite("Function convertHandler.getUnit(input)", () => {
 		test("For Each Valid Unit Inputs", done => {
-			let input = [
-				"gal",
-				"l",
-				"mi",
-				"km",
-				"lbs",
-				"kg",
-				"GAL",
-				"L",
-				"MI",
-				"KM",
-				"LBS",
-				"KG"
-			];
+			let input = ["gal", "L", "mi", "km", "lbs", "kg"];
 			input.forEach(item => {
 				assert.isOk(
 					convertController.getUnit(item),

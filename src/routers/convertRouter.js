@@ -1,6 +1,6 @@
 const express = require("express"),
-			router = express.Router(),
-			convertController = require("../controllers/convertController");
+	router = express.Router(),
+	convertController = require("../controllers/convertController");
 
 router.get("/convert", convertController.doConvert);
 

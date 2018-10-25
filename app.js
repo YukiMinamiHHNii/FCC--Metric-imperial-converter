@@ -9,6 +9,8 @@ app.set("view engine", "pug");
 
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet.xssFilter());
+app.use(helmet.noSniff());
 
 app.get("/", (req, res) => {
 	res.render("index");
@@ -26,4 +28,4 @@ app.use((req, res) => {
 app.listen(process.env.SERVER_PORT);
 console.log(`App listening on port ${process.env.SERVER_PORT}`);
 
-module.exports= app;
+module.exports = app;
