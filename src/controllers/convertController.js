@@ -38,68 +38,70 @@ function spellOutUnit(input) {
 	return units[input].spelling;
 }
 
-function convert(num, unit, result) {
-	let data,
-		invalidNum = false,
-		invalidUnit = false;
+function convert(num, unit) {
+	return new Promise((resolve, reject) => {
+		let data,
+			invalidNum = false,
+			invalidUnit = false;
 
-	if (!num) {
-		invalidNum = true;
-	}
+		if (!num) {
+			invalidNum = true;
+		}
 
-	switch (unit) {
-		case "gal":
-			data = expr.evaluate(`${num}/0.26417`).toFixed(5);
-			break;
-		case "L":
-			data = expr.evaluate(`${num}*.26417`).toFixed(5);
-			break;
-		case "mi":
-			data = expr.evaluate(`${num}/.62137`).toFixed(5);
-			break;
-		case "km":
-			data = expr.evaluate(`${num}*.62137`).toFixed(5);
-			break;
-		case "lbs":
-			data = expr.evaluate(`${num}/2.2046`).toFixed(5);
-			break;
-		case "kg":
-			data = expr.evaluate(`${num}*2.2046`).toFixed(5);
-			break;
-		default:
-			invalidUnit = true;
-			break;
-	}
+		switch (unit) {
+			case "gal":
+				data = expr.evaluate(`${num}/0.26417`).toFixed(5);
+				break;
+			case "L":
+				data = expr.evaluate(`${num}*.26417`).toFixed(5);
+				break;
+			case "mi":
+				data = expr.evaluate(`${num}/.62137`).toFixed(5);
+				break;
+			case "km":
+				data = expr.evaluate(`${num}*.62137`).toFixed(5);
+				break;
+			case "lbs":
+				data = expr.evaluate(`${num}/2.2046`).toFixed(5);
+				break;
+			case "kg":
+				data = expr.evaluate(`${num}*2.2046`).toFixed(5);
+				break;
+			default:
+				invalidUnit = true;
+				break;
+		}
 
-	if (invalidNum && invalidUnit) {
-		return result(true, "Invalid number and unit");
-	} else if (invalidNum && !invalidUnit) {
-		return result(true, "Invalid number");
-	} else if (!invalidNum && invalidUnit) {
-		return result(true, "Invalid unit");
-	}
+		if (invalidNum && invalidUnit) {
+			reject("Invalid number and unit");
+		} else if (invalidNum && !invalidUnit) {
+			reject("Invalid number");
+		} else if (!invalidNum && invalidUnit) {
+			reject("Invalid unit");
+		}
 
-	return result(null, data);
+		resolve(data);
+	});
 }
 
 exports.doConvert = (req, res) => {
 	let num = getNum(req.query.input),
 		unit = getUnit(req.query.input);
 
-	convert(num, unit, (err, data) => {
-		if (err) {
-			res.json({ error: data });
-		} else {
+	convert(num, unit)
+		.then(result => {
 			let returnUnit = getReturnUnit(unit);
-			res.json({
+			return res.json({
 				initNum: parseFloat(num),
 				initUnit: unit,
-				returnNum: parseFloat(data),
+				returnNum: parseFloat(result),
 				returnUnit: returnUnit,
-				string: `${num} ${unit} converts to ${data} ${returnUnit}`
+				string: `${num} ${unit} converts to ${result} ${returnUnit}`
 			});
-		}
-	});
+		})
+		.catch(err => {
+			return res.json({ error: err });
+		});
 };
 
 exports.getNum = getNum;
