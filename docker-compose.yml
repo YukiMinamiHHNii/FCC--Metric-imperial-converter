@@ -1,0 +1,8 @@
+version: "3"
+services:
+  metric-imperial:
+    image: metric-imperial
+    container_name: metric-imperial
+    restart: always
+    ports:
+      - 3005:3000
